@@ -23,18 +23,17 @@ try:
     convertText2Audio("The word is "+searchWord)
     
     meanings = meanings[searchWord]
-    # loop to say forst definition , second defintion 
-    for wordClass,definition in meanings.items():
-        convertText2Audio("definition "+str(count))
-        
+    for wordClass, definitions in meanings.items():
+         
         convertText2Audio("word class")
         print(wordClass)
         convertText2Audio(wordClass)
         
-        convertText2Audio("definition")
-        print(definition)
-        convertText2Audio(definition)
-        
-        count = count + 1
+        print(definitions) # debug
+        for definition in definitions: 
+            print(str(count) + ": " + definition)
+            convertText2Audio("definition "+str(count))
+            convertText2Audio(definition)
+            count = count + 1
 except:
     convertText2Audio("The word "+searchWord+" is not found")
