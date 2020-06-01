@@ -43,18 +43,26 @@ def record_audio(ask = False):
             voiceData = r.recognize_google(audio)
         except sr.UnknownValueError:
             convertText2Audio('Error: unrecognizable word')
+            voiceData = ''
         except sr.RequestError:
             convertText2Audio('Error: the speech service is down')
+            voiceData = ''
         return voiceData 
     
 convertText2Audio('What word do you want to search? ')
-searchWord = record_audio()
-convertText2Audio('The word is '+searchWord)   
+record = record_audio()
 
-try:
-    dictionaryy = PyDictionary(searchWord) 
-    findDefintions(dictionaryy)
-except:
-        convertText2Audio('The word '+searchWord+' is not found')
-        
+if record != '': 
+    words = record.split(' ')
+    if len(words) == 1: 
+        searchWord = words[0]
+        convertText2Audio('The word is '+searchWord)   
+
+        try:
+            dictionaryy = PyDictionary(searchWord) 
+            findDefintions(dictionaryy)
+        except:
+            convertText2Audio('The word '+searchWord+' is not found')         
+    else: 
+        convertText2Audio('Can not define more than one word')     
 convertText2Audio('End of definition')
