@@ -2,7 +2,4 @@
 
 SpeechDictionary allows you to find definitions for a word. 
 
-The application uses PyDictionary module to find the definition of the word and pyttsx3 library to translate texts into speech
-
-Here are the features left to do:
-- translate speech into texts
+The application uses the SpeechRecognition module to identify the word to be defined spoken by the user. The PyDictionary module is used to find the definition of the word and the pyttsx3 library to translate texts into speech.

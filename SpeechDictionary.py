@@ -1,12 +1,14 @@
 
 from PyDictionary import PyDictionary
-from bs4 import BeautifulSoup
 import pyttsx3
 import requests
+import speech_recognition as sr
 
 activateSpeech = True 
 
 def convertText2Audio(audioString):
+    print(audioString)
+    
     if activateSpeech: 
         engine = pyttsx3.init()
         
@@ -20,26 +22,39 @@ def findDefintions(dictionary):
     count = 1
     meanings = dictionary.getMeanings()
     meanings = meanings[searchWord]
+    
     for wordClass, definitions in meanings.items():
-            
-        print('\tClass: '+wordClass)
         convertText2Audio('\tClass: '+wordClass)
-            
         #print(definitions) # debug
         for definition in definitions: 
-            print('\t\tDefinition '+str(count) + ': ' + definition)
             convertText2Audio('\t\tDefinition '+str(count) + ': ' + definition)
             count = count + 1
 
-convertText2Audio('What word do you want to search? ') 
-searchWord = input('What word do you want to search? ')
-
-print('The word is: '+searchWord)
+def record_audio(ask = False):
+    r = sr.Recognizer()
+    
+    with sr.Microphone() as source:
+        if ask: 
+            convertText2Audio(ask)
+        audio = r.listen(source)
+        
+        voiceData = ''
+        try:
+            voiceData = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            convertText2Audio('Error: unrecognizable word')
+        except sr.RequestError:
+            convertText2Audio('Error: the speech service is down')
+        return voiceData 
+    
+convertText2Audio('What word do you want to search? ')
+searchWord = record_audio()
 convertText2Audio('The word is '+searchWord)   
 
 try:
     dictionaryy = PyDictionary(searchWord) 
     findDefintions(dictionaryy)
 except:
-        print('The word '+searchWord+' is not found')
         convertText2Audio('The word '+searchWord+' is not found')
+        
+convertText2Audio('End of definition')
